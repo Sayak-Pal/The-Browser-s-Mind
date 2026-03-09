@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Browser's Mind</title>
+    <!-- Fonts: Minimalist sans-serif for story, monospace for code -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&family=Fira+Code:wght@400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+    <!-- Fullscreen Noise/Watermark Layers (Managed by Modules) -->
+    <canvas id="antiScrapeCanvas" class="hidden"></canvas>
+    <div id="watermarkContainer" class="hidden"></div> <!-- Module 5 will inject here -->
+
+    <!-- SCREEN 1: Start Menu -->
+    <div id="startScreen" class="screen active flex-center">
+        <div class="glass-panel text-center pulse">
+            <h1 class="title">The Browser's Mind</h1>
+            <p class="subtitle mt-4">I have rules. Can you find them all?</p>
+            <p class="small text-muted mt-2">A puzzle of boundaries.</p>
+            <button id="startBtn" class="btn btn-primary mt-8">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Enter the Mind
+            </button>
+            <div class="mt-4 volume-control flex-center">
+                <label for="startVolume" class="small text-muted">Music Volume</label>
+                <input type="range" id="startVolume" min="0" max="1" step="0.05" value="0.5" class="mt-2">
+            </div>
+            <p class="small text-muted mt-4">Sound recommended.</p>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: Main Game UI -->
+    <div id="gameUI" class="screen hidden">
+        <!-- HUD -->
+        <header class="hud">
+            <div class="hud-left">
+                <span class="hud-label">Discoveries:</span>
+                <span id="foundVal" class="hud-value">0/9</span>
+            </div>
+            <div class="hud-right">
+                <button id="hintBtn" class="btn btn-icon" title="Ask for a hint">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                </button>
+                <span class="hud-label ml-4">Resonance:</span>
+                <span id="scoreVal" class="hud-value accent">0</span>
+                <button id="menuBtn" class="btn btn-icon ml-4" title="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Hint Overlay -->
+        <div id="hintText" class="hint-overlay hidden">Hint: Look around carefully.</div>
+
+        <!-- Narrative Output (1st Person) -->
+        <div class="narrative-container">
+            <p id="narrativeBox" class="narrative-text fade-in">"I am listening."</p>
+        </div>
+
+        <!-- The "Puzzle Box" Area (Contains elements to interact with to trigger anti-cheat) -->
+        <main class="puzzle-area">
+            <div id="contentContainer" class="puzzle-card glass-panel">
+                <div class="card-header">
+                    <h2>Memory Fragment 01</h2>
+                    <button class="btn btn-ghost reveal-btn" data-target="fragData">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        Examine Memory
+                    </button>
+                    <span id="timer-fragData" class="timer-badge hidden">00:30</span>
+                </div>
+
+                <!-- Target for Zero-Width / Layout shift / Randomization -->
+                <p class="q-text select-all" id="protectedText1">
+                    To understand the boundaries, you must push against them. If you try to take this text, I will know.
+                    If you look away, I will know.
+                </p>
+
+                <div class="answers-group mt-4" id="fragData">
+                    <label class="answer-option"><input type="radio" name="q1"> <span>The truth is
+                            ephemeral.</span></label>
+                    <label class="answer-option"><input type="radio" name="q1"> <span>Order is an
+                            illusion.</span></label>
+                    <label class="answer-option"><input type="radio" name="q1"> <span>Nothing is truly
+                            hidden.</span></label>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- PAUSE MENU -->
+    <div id="pauseMenu" class="modal-overlay hidden">
+        <div class="glass-panel text-center">
+            <h2 class="title-sm mb-6">Resting State</h2>
+            <div class="flex-col gap-4">
+                <button id="resumeBtn" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                    Resume
+                </button>
+                <div class="volume-control flex-col">
+                    <label for="pauseVolume" class="small text-muted">Music Volume</label>
+                    <input type="range" id="pauseVolume" min="0" max="1" step="0.05" value="0.5">
+                </div>
+                <button id="restartBtn" class="btn btn-ghost">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                    </svg>
+                    Restart Simulation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEARNING CARD MODAL -->
+    <div id="modalBg" class="modal-overlay hidden"></div>
+    <div id="learningModal" class="learning-modal hidden glass-panel">
+        <h2 id="modalTitle" class="modal-title">Rule Discovered</h2>
+        <div class="modal-body">
+            <p id="modalText">Explanation goes here.</p>
+        </div>
+        <div class="modal-footer mt-6">
+            <button id="closeModalBtn" class="btn btn-primary">I Understand</button>
+        </div>
+    </div>
+
+    <!-- IDLE HELP MODAL -->
+    <div id="idleHelpModal" class="learning-modal hidden glass-panel" style="z-index: 1002;">
+        <h2 class="modal-title">Checking In...</h2>
+        <div class="modal-body">
+            <p>You seem to be resting. Have you found all the boundaries? I can guide you to the remaining <span
+                    id="idleCount" class="accent">0</span> rules.</p>
+            <p class="mt-4 text-muted small">Would you like some assistance locating them?</p>
+        </div>
+        <div class="modal-footer mt-6 flex-center gap-4" style="flex-direction: row; justify-content: flex-start;">
+            <button id="acceptHelpBtn" class="btn btn-primary">Yes, help me</button>
+            <button id="declineHelpBtn" class="btn btn-ghost">No, I'm okay</button>
+        </div>
+    </div>
+
+    <!-- EARLY EXIT MODAL -->
+    <div id="earlyExitModal" class="learning-modal hidden glass-panel" style="z-index: 5001; text-align: center;">
+        <h2 class="title" style="font-size: 5rem; margin-bottom: 2rem;">😞</h2>
+        <h3 class="modal-title">You Left Too Early</h3>
+        <div class="modal-body">
+            <p>You did not find a minimum of 2 checks.</p>
+            <p class="mt-4 text-muted">The browser environment is complex. You must persevere if you wish to understand
+                it.</p>
+        </div>
+        <div class="modal-footer mt-6">
+            <button onclick="location.reload()" class="btn btn-primary">Try Again</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: END SEQUENCE -->
+    <div id="endScreen" class="screen hidden flex-center" style="z-index: 5000; background: var(--bg-deep);">
+        <div class="glass-panel fade-in" style="max-width: 650px; width: 90%; text-align: left; padding: 2.5rem;">
+            <h1 id="endTitle" class="title glow text-center" style="font-size: 2.5rem;">Harmony Achieved</h1>
+            <p class="mt-4 text-muted text-center max-w-md mx-auto mb-6">Simulation analysis complete. Review your
+                awareness score below.</p>
+
+            <div id="scorecardTable" class="mt-6 flex-col gap-2">
+                <!-- Dynamically populated by JS buildScorecard() -->
+            </div>
+
+            <div class="text-center mt-8 pt-6" style="border-top: 1px solid var(--glass-border);">
+                <button onclick="location.reload()" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                    </svg>
+                    Begin Anew
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/modules/clipboard.js"></script>
+    <script src="js/modules/focus.js"></script>
+    <script src="js/modules/devtools.js"></script>
+    <script src="js/modules/reveal.js"></script>
+    <script src="js/modules/noise.js"></script>
+    <script src="js/modules/watermark.js"></script>
+    <script src="js/modules/layout_shift.js"></script>
+    <script src="js/modules/zero_width.js"></script>
+    <script src="js/modules/randomization.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Note: Modules are pre-loaded but wait for GameEngine interactions
+            window.GameEngine.init();
+        });
+    </script>
+</body>
+
+</html>

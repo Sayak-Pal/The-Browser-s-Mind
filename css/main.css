@@ -1,0 +1,532 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Enterprise Gateway Palette */
+    --bg-base: #0F172A;
+    /* slate-900 */
+    --bg-deep: #020617;
+    /* slate-950 */
+    --glass-bg: rgba(30, 41, 59, 0.45);
+    /* slate-800 with opacity */
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.05);
+
+    --text-primary: #F8FAFC;
+    /* slate-50 */
+    --text-secondary: #CBD5E1;
+    /* slate-300 */
+    --text-muted: #94A3B8;
+    /* slate-400 */
+
+    /* Corporate Accents */
+    --accent: #3B82F6;
+    /* blue-500 */
+    --accent-hover: #60A5FA;
+    /* blue-400 */
+    --accent-secondary: #F97316;
+    /* orange-500 (CTA) */
+    --accent-glow: rgba(59, 130, 246, 0.4);
+
+    --font-sans: 'Fira Sans', -apple-system, sans-serif;
+    --font-mono: 'Fira Code', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: radial-gradient(circle at top right, #1E293B 0%, var(--bg-deep) 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout Classes */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    transition: opacity 0.5s ease;
+}
+
+.hidden {
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mt-6 {
+    margin-top: 1.5rem;
+}
+
+.mt-8 {
+    margin-top: 2rem;
+}
+
+.ml-4 {
+    margin-left: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.max-w-md {
+    max-width: 28rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Text Styles */
+.title {
+    font-size: 3.5rem;
+    font-weight: 300;
+    letter-spacing: -0.05em;
+    line-height: 1.1;
+}
+
+.title-sm {
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+.text-large {
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+.small {
+    font-size: 0.875rem;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.glow {
+    text-shadow: 0 0 20px var(--accent-glow);
+    color: var(--accent);
+}
+
+/* Glassmorphism Components */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--glass-highlight);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    /* More professional than pill buttons */
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    letter-spacing: 0.025em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px 0 var(--accent-glow);
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+}
+
+.btn-ghost {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+}
+
+.btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-icon {
+    padding: 0.5rem;
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.btn-icon:hover {
+    color: var(--accent);
+}
+
+/* HUD Header */
+.hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 100;
+}
+
+.hud-left,
+.hud-right {
+    display: flex;
+    align-items: center;
+}
+
+.hud-label {
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+}
+
+.hud-value {
+    font-family: var(--font-mono);
+    font-size: 1.25rem;
+    margin-left: 0.5rem;
+    font-weight: 400;
+}
+
+.hud-value.accent {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Narrative Area */
+.narrative-container {
+    position: absolute;
+    top: 20%;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+}
+
+.narrative-text {
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-style: italic;
+    color: #E2E8F0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    transition: opacity 2s ease-in-out;
+}
+
+/* Puzzle Area (The interactive elements) */
+.puzzle-area {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 600px;
+    z-index: 50;
+}
+
+.puzzle-card {
+    padding: 2.5rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 1rem;
+}
+
+.card-header h2 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.q-text {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 2rem;
+}
+
+.answers-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.answer-option {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 400;
+    background: rgba(15, 23, 42, 0.6);
+}
+
+.answer-option:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: var(--accent);
+    transform: translateX(4px);
+}
+
+.answer-option input {
+    accent-color: var(--accent);
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 6, 23, 0.90);
+    backdrop-filter: blur(16px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.learning-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    max-width: 650px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 2.5rem;
+}
+
+.learning-modal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.learning-modal::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.learning-modal::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 4px;
+}
+
+.modal-title {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 1rem;
+    font-family: var(--font-sans);
+}
+
+.modal-body {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    font-weight: 400;
+}
+
+.modal-body code {
+    font-family: var(--font-mono);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+}
+
+.modal-footer {
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Hint Overlay */
+.hint-overlay {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: var(--bg-deep);
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 0 20px var(--accent-glow);
+    z-index: 200;
+}
+
+/* Scorecard Table Rows */
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+/* Utilities */
+.timer-badge {
+    font-family: var(--font-mono);
+    color: var(--accent);
+}
+
+.select-all::selection {
+    background: var(--accent-glow);
+    color: white;
+}
+
+/* Range Input Styling */
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    max-width: 200px;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: var(--glass-border);
+    border-radius: 4px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: -5px;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+/* Animations */
+.pulse {
+    animation: softPulse 4s infinite alternate;
+}
+
+@keyframes softPulse {
+    0% {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    100% {
+        box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.15);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Module integration overrides */
+#antiScrapeCanvas {
+    z-index: 1;
+    opacity: 0.05;
+}
+
+.watermark-layer {
+    z-index: 2;
+    opacity: 0.03;
+    pointer-events: none;
+}
